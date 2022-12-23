@@ -34,6 +34,7 @@ class CustomInput extends StatelessWidget {
       child: TextField(
         controller: this.textController,
         autocorrect: false,
+        obscureText: this.isPassword,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           prefixIcon: Icon(this.icon),

@@ -1,5 +1,8 @@
+import 'package:chat_app/helpers/mostrar_alerta.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../services/auth_service.dart';
 import '../widgets/blue_button.dart';
 import '../widgets/custom_input.dart';
 import '../widgets/labels.dart';
@@ -38,10 +41,12 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final emailCtrl = TextEditingController();
-    final passCtrl = TextEditingController();
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -61,10 +66,21 @@ class __FormState extends State<_Form> {
           ),
           BlueButton(
             text: 'Login',
-            onPressed: () {
-              print(emailCtrl.text);
-              print("emailCtrl.text");
-            }, //authService.autenticando ? null : _login,
+            onPressed: authService.autenticando
+                ? null
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    final loginOk = await authService.login(
+                        emailCtrl.text.trim(), passCtrl.text.trim());
+                    if (loginOk == true) {
+                      // Conectar al socket server
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                    } else {
+                      // Mostrar alerta
+                      MostrarAlerta(context, "Login Incorrecto",
+                          "Credenciales incorrectas");
+                    }
+                  },
           ),
         ],
       ),
