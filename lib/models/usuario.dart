@@ -25,7 +25,7 @@ class Usuario {
         nombre: json["nombre"],
         email: json["email"],
         uid: json["uid"],
-        activo: true, //json["activo"],
+        activo: json["online"],
       );
 
   Map<String, dynamic> toJson() => {

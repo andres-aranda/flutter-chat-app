@@ -11,7 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService with ChangeNotifier {
   /* #region Properties */
-  late Usuario _usuario;
+    late Usuario _usuario ;
 
   Usuario get usuario => _usuario;
 
@@ -95,7 +95,9 @@ class AuthService with ChangeNotifier {
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
+      _usuario = loginResponse.usuario;
       await _guardarToken(loginResponse.token);
+      return true;
     } else {
       logout();
     }
